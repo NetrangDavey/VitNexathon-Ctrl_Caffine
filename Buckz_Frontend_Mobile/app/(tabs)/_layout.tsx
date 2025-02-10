@@ -37,6 +37,24 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
         }}
       />
+      <Tabs.Screen
+        name="usertracker"
+        options={{
+          title: 'USER TRACKER',
+          headerShown: true,
+          header: () => <TabHeader title="USER TRACKER" />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="money" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="investment"
+        options={{
+          title: 'INVESTMENT',
+          headerShown: true,
+          header: () => <TabHeader title="INVESTMENT" />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="money" color={color} />,
+        }}
+      />
     </Tabs>
   );
 }
