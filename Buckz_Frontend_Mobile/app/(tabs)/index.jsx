@@ -1,9 +1,11 @@
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { StyleSheet, ScrollView, Pressable, Dimensions, Image } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Text, View } from '@/components/Themed';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Animatable from 'react-native-animatable';
-
+import axios from 'axios';
+import { BASE_URL } from "../../constants/API";
 const { width } = Dimensions.get('window');
 
 // Sample data
@@ -17,7 +19,30 @@ const accountData = {
   investments: 12000.00
 };
 
+// API Calls
+const fetchData = async () => {
+  try {
+    // console.log();
+    // setLoading(true);
+    const response = await axios.get(`${BASE_URL}/users/8/`);
+    console.log('Axios response:', response.data);
+    
+  }catch (err) {
+    console.log(err);
+    setError(`Failed to fetch data: ${err.message}`);
+    console.error('Axios error:', err);
+  } finally {
+    console.log("Hgaya");
+    // setLoading(false);
+    // setRefreshing(false);
+  }
+
+}
+
 export default function HomeScreen() {
+  useEffect(()=>
+    {fetchData()},[]
+  );
   return (
     <ScrollView style={styles.container}>
       {/* Header Section */}
