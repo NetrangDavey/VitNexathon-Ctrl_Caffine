@@ -8,10 +8,10 @@ const { width } = Dimensions.get('window');
 
 // Sample data
 const accountData = {
-  name: "John Doe",
+  name: "RAMSWAROOP PATEL SUPERSTAR",
   balance: 25430.50,
   loanAmount: 15000.00,
-  accountNumber: "**** 1234",
+  accountNumber: "**** **** 6065",
   loanDueDate: "2024-05-15",
   savings: 8500.00,
   investments: 12000.00
@@ -40,7 +40,7 @@ export default function HomeScreen() {
             <Text style={styles.balanceTitle}>Total Balance</Text>
           </View>
           <Text style={styles.balanceAmount}>
-            ${accountData.balance.toLocaleString()}
+            ₹{accountData.balance.toLocaleString()}
           </Text>
         </LinearGradient>
       </Animatable.View>
@@ -81,7 +81,7 @@ export default function HomeScreen() {
             <FontAwesome name="line-chart" size={24} color="#00ff87" />
             <Text style={styles.overviewLabel}>Investments</Text>
             <Text style={styles.overviewAmount}>
-              ${accountData.investments.toLocaleString()}
+              ₹{accountData.investments.toLocaleString()}
             </Text>
           </LinearGradient>
         </Animatable.View>
@@ -94,7 +94,7 @@ export default function HomeScreen() {
             <FontAwesome name="money" size={24} color="#00ff87" />
             <Text style={styles.overviewLabel}>Loan Balance</Text>
             <Text style={styles.overviewAmount}>
-              ${accountData.loanAmount.toLocaleString()}
+              ₹{accountData.loanAmount.toLocaleString()}
             </Text>
             <Text style={styles.dueDate}>Due: {accountData.loanDueDate}</Text>
           </LinearGradient>
@@ -144,6 +144,7 @@ const styles = StyleSheet.create({
   balanceHeader: {
     flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0)',
   },
   balanceTitle: {
     color: '#fff',
