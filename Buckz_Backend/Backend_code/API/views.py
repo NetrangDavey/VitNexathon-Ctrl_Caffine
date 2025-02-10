@@ -1,28 +1,56 @@
 from rest_framework import viewsets
-from .models import UserInfo, LoanInfo, LoanListed, LoanStatus, PaymentHistory
-from .serializers import UserInfoSerializer, LoanInfoSerializer, LoanListedSerializer, LoanStatusSerializer, PaymentHistorySerializer
+from rest_framework import viewsets
+from .models import UserInfo, LoanInfo, LoanListed
+from .serializers import UserInfoSerializer,LoanInfoSerializer,LoanListedSerializer
 
-# ViewSet for UserInfo
 class UserInfoViewSet(viewsets.ModelViewSet):
     queryset = UserInfo.objects.all()
     serializer_class = UserInfoSerializer
 
-# ViewSet for LoanInfo
+    def create(self, request, *args, **kwargs):
+        # Handle user creation
+        return super().create(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        # Handle user update
+        return super().update(request, *args, **kwargs)
+
+
+# Loan View
+
 class LoanInfoViewSet(viewsets.ModelViewSet):
-    queryset = LoanInfo.objects.all()
-    serializer_class = LoanInfoSerializer
+    queryset = LoanInfo.objects.all()  # Defines the queryset to be used in all actions
+    serializer_class = LoanInfoSerializer  # Specifies the serializer for LoanInfo model
 
-# ViewSet for LoanListed
+    def perform_create(self, serializer):
+        # Custom logic for creating a LoanInfo instance (if needed)
+        serializer.save()
+
+    def perform_update(self, serializer):
+        # Custom logic for updating a LoanInfo instance (if needed)
+        serializer.save()
+
+
+
+# applied loan status view
 class LoanListedViewSet(viewsets.ModelViewSet):
-    queryset = LoanListed.objects.all()
-    serializer_class = LoanListedSerializer
+    """
+    A viewset for viewing, creating, updating, and deleting loan listing requests.
+    """
+    queryset = LoanListed.objects.all()  # Retrieve all loan listed requests
+    serializer_class = LoanListedSerializer  # Use the LoanListed serializer
+     # Ensure the user is authenticated
 
-# ViewSet for LoanStatus
-class LoanStatusViewSet(viewsets.ModelViewSet):
-    queryset = LoanStatus.objects.all()
-    serializer_class = LoanStatusSerializer
+    def perform_create(self, serializer):
+        """
+        Override perform_create to associate the currently authenticated user
+        with the loan listed request (if necessary).
+        """
+        # No 'requester_id' is present in the LoanListed model. So no need to assign it.
+        serializer.save()  # Save the loan listed entry without needing the requester_id
 
-# ViewSet for PaymentHistory
-class PaymentHistoryViewSet(viewsets.ModelViewSet):
-    queryset = PaymentHistory.objects.all()
-    serializer_class = PaymentHistorySerializer
+    def perform_update(self, serializer):
+        """
+        Override perform_update to customize loan listed request updates.
+        """
+        serializer.save()
