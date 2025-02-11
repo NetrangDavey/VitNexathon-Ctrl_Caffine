@@ -117,7 +117,7 @@ export default function HomeScreen() {
       {/* Financial Overview */}
       <View style={styles.overviewContainer}>
         <Animatable.View animation="fadeInLeft" delay={600}>
-          <Pressable onPress={() => handleNavigation('./investment')}>
+          <Pressable onPress={() => handleNavigation('../menu/investment')}>
             <LinearGradient
               colors={['#2C2D3E', '#1F1F2B']}
               style={styles.overviewCard}
