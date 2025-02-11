@@ -27,13 +27,14 @@ class UserInfo(AbstractBaseUser):
     loan_id = models.ForeignKey('LoanInfo', on_delete=models.SET_NULL, null=True, blank=True)  # Can be null if no loan
     applied_loan_status = models.ForeignKey('LoanListed', on_delete=models.SET_NULL, null=True, blank=True)  # Status of loan application
     created_at = models.DateTimeField(auto_now_add=True)
-
+    account= models.ForeignKey('Account', on_delete=models.SET_NULL, null=True, blank=True)
+    personal_finance = models.ForeignKey('PersonalFinance', on_delete=models.SET_NULL, null=True, blank=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name', 'phone']
     objects = UserManager()
 
     def __str__(self):
-        return self.email
+        return self.name
 
 class LoanInfo(models.Model):
     # Fields for LoanInfo
@@ -61,3 +62,43 @@ class LoanListed(models.Model):
         return f"Loan Request {self.list_id} - {self.requester_type} - {self.amount}"
 
 
+class Account(models.Model):
+    account_id = models.AutoField(primary_key=True)
+    account_no = models.CharField(max_length=20)
+    balance = models.DecimalField(max_digits=15, decimal_places=2)
+
+    def __str__(self):
+        return f"Account {self.account_id} "
+    
+class PersonalFinance(models.Model):
+    finance_id = models.AutoField(primary_key=True)
+    monthly_income = models.DecimalField(max_digits=15, decimal_places=2)
+    # monthly_expense = models.ForeignKey("Expense", null=True, blank=True, on_delete=models.CASCADE)
+    savings = models.DecimalField(max_digits=15, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Personal Finance {self.finance_id}"
+
+
+class Expense(models.Model):
+    EXPENSE_CATEGORIES = [
+        ('Food', 'Food'),
+        ('Transportation', 'Transportation'),
+        ('Rent', 'Rent'),
+        ('Utilities', 'Utilities'),
+        ('Entertainment', 'Entertainment'),
+        ('Healthcare', 'Healthcare'),
+        ('Miscellaneous', 'Miscellaneous'),
+    ]
+
+    expense_id = models.AutoField(primary_key=True)
+    finance_id = models.ForeignKey(PersonalFinance, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=15, decimal_places=2)
+    category = models.CharField(max_length=20, choices=EXPENSE_CATEGORIES)  # Use the choices here
+    type = models.CharField(max_length=20, choices=[("Monthly","Monthly"),("Periodically","Periodically"),("Yearly","Yearly")])  # Use the choices here
+    description = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Expense {self.expense_id} "

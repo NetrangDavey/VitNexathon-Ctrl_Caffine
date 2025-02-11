@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework import viewsets
-from .models import UserInfo, LoanInfo, LoanListed
-from .serializers import UserInfoSerializer,LoanInfoSerializer,LoanListedSerializer
+from .models import Account, Expense, PersonalFinance, UserInfo, LoanInfo, LoanListed
+from .serializers import AccountSerializer, ExpenseSerializer, PersonalFinanceSerializer, UserInfoSerializer,LoanInfoSerializer,LoanListedSerializer
 
 class UserInfoViewSet(viewsets.ModelViewSet):
     queryset = UserInfo.objects.all()
@@ -54,3 +54,63 @@ class LoanListedViewSet(viewsets.ModelViewSet):
         Override perform_update to customize loan listed request updates.
         """
         serializer.save()
+
+
+class PersonalFinanceViewSet(viewsets.ModelViewSet):
+    """
+    A viewset for viewing, creating, updating, and deleting personal finance records.
+    """
+    queryset = PersonalFinance.objects.all()  # Retrieve all personal finance records
+    serializer_class = PersonalFinanceSerializer  # Use the PersonalFinance serializer
+
+    def perform_create(self, serializer):
+        """
+        Override perform_create to handle custom logic for creating a personal finance record.
+        """
+        serializer.save()  # Save the personal finance record
+
+    def perform_update(self, serializer):
+        """
+        Override perform_update to handle custom logic for updating a personal finance record.
+        """
+        serializer.save()  # Save the updated personal finance record
+
+
+class AccountViewSet(viewsets.ModelViewSet):
+    """
+    A viewset for viewing, creating, updating, and deleting account records.
+    """
+    queryset = Account.objects.all()  # Retrieve all account records
+    serializer_class = AccountSerializer  # Use the Account serializer
+
+    def perform_create(self, serializer):
+        """
+        Override perform_create to handle custom logic for creating an account.
+        """
+        serializer.save()  # Save the account record
+
+    def perform_update(self, serializer):
+        """
+        Override perform_update to handle custom logic for updating an account.
+        """
+        serializer.save()  # Save the updated account record
+
+
+class ExpenseViewSet(viewsets.ModelViewSet):
+    """
+    A viewset for viewing, creating, updating, and deleting expense records.
+    """
+    queryset = Expense.objects.all()  # Retrieve all expense records
+    serializer_class = ExpenseSerializer  # Use the Expense serializer
+
+    def perform_create(self, serializer):
+        """
+        Override perform_create to handle custom logic for creating an expense record.
+        """
+        serializer.save()  # Save the expense record
+
+    def perform_update(self, serializer):
+        """
+        Override perform_update to handle custom logic for updating an expense record.
+        """
+        serializer.save()  # Save the updated expense record
