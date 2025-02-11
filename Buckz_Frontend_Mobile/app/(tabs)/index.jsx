@@ -7,42 +7,30 @@ import * as Animatable from 'react-native-animatable';
 import axios from 'axios';
 import { BASE_URL } from "../../constants/API";
 const { width } = Dimensions.get('window');
-
-// Sample data
-const accountData = {
-  name: "RAMSWAROOP PATEL SUPERSTAR",
-  balance: 25430.50,
-  loanAmount: 15000.00,
-  accountNumber: "**** **** 6065",
-  loanDueDate: "2024-05-15",
-  savings: 8500.00,
-  investments: 12000.00
-};
-
-// API Calls
-const fetchData = async () => {
-  try {
-    // console.log();
-    // setLoading(true);
-    const response = await axios.get(`${BASE_URL}/users/8/`);
-    console.log('Axios response:', response.data);
-    
-  }catch (err) {
-    console.log(err);
-    setError(`Failed to fetch data: ${err.message}`);
-    console.error('Axios error:', err);
-  } finally {
-    console.log("Hgaya");
-    // setLoading(false);
-    // setRefreshing(false);
-  }
-
-}
-
 export default function HomeScreen() {
-  useEffect(()=>
-    {fetchData()},[]
-  );
+  const [accountData, setAccountData] = useState({});
+  const [error, setError] = useState(null);
+
+  // API Calls
+  const fetchData = async () => {
+    try {
+      console.log("BASE_URL:", BASE_URL);
+      const response = await axios.get(`${BASE_URL}/users/7/`);
+      console.log('Axios response:', response.data);
+      setAccountData(response.data);
+    } catch (err) {
+      console.log(err);
+      setError(`Failed to fetch data: ${err.message}`);
+      console.error('Axios error:', err);
+    } finally {
+      console.log("Hgaya");
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <ScrollView style={styles.container}>
       {/* Header Section */}
@@ -50,7 +38,7 @@ export default function HomeScreen() {
         <Animatable.View animation="fadeIn" style={styles.profileSection}>
           <Text style={styles.greeting}>Welcome back</Text>
           <Text style={styles.name}>{accountData.name}</Text>
-          <Text style={styles.accountNumber}>Acc: {accountData.accountNumber}</Text>
+          {/* <Text style={styles.accountNumber}>Acc: {accountData.accountNumber}</Text> */}
         </Animatable.View>
       </LinearGradient>
 
@@ -65,7 +53,8 @@ export default function HomeScreen() {
             <Text style={styles.balanceTitle}>Total Balance</Text>
           </View>
           <Text style={styles.balanceAmount}>
-            ₹{accountData.balance.toLocaleString()}
+            {/* ₹{accountData.balance?.toLocaleString()} */}
+            ₹25,000
           </Text>
         </LinearGradient>
       </Animatable.View>
@@ -106,7 +95,7 @@ export default function HomeScreen() {
             <FontAwesome name="line-chart" size={24} color="#00ff87" />
             <Text style={styles.overviewLabel}>Investments</Text>
             <Text style={styles.overviewAmount}>
-              ₹{accountData.investments.toLocaleString()}
+              ₹{accountData.investments?.toLocaleString()}
             </Text>
           </LinearGradient>
         </Animatable.View>
@@ -119,7 +108,7 @@ export default function HomeScreen() {
             <FontAwesome name="money" size={24} color="#00ff87" />
             <Text style={styles.overviewLabel}>Loan Balance</Text>
             <Text style={styles.overviewAmount}>
-              ₹{accountData.loanAmount.toLocaleString()}
+              ₹{accountData.loanAmount?.toLocaleString()}
             </Text>
             <Text style={styles.dueDate}>Due: {accountData.loanDueDate}</Text>
           </LinearGradient>

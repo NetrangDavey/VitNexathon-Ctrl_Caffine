@@ -74,6 +74,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Backend_code.wsgi.application'
 CORS_ALLOW_ALL_ORIGINS = True
+ALLOWED_HOSTS=['*']
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
