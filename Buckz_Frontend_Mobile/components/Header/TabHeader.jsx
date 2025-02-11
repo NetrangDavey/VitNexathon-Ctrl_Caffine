@@ -1,18 +1,33 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, Animated, TouchableOpacity, TouchableWithoutFeedback, ScrollView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
 
 const TabHeader = ({ title }) => {
+  const router = useRouter();
   const slideAnim = useRef(new Animated.Value(-300)).current;
   const overlayAnimation = useRef(new Animated.Value(0)).current;
 
-  
+useEffect(() => {
+  Animated.timing(slideAnim, {
+    toValue: 0,
+    duration: 500,
+    useNativeDriver: true,
+  }).start();
+}, []);
+
+
+const handleprofile = () => {
+    console.log('Profile');
+    router.push('/menu/settings/profile');
+  };
 
   return (
     <>
       <View style={styles.header}>
         <Text style={styles.title}>{title}</Text>
-        <TouchableOpacity style={styles.iconButton}>
+        <TouchableOpacity style={styles.iconButton} onPress={handleprofile}>
           <MaterialIcons name="account-circle" size={28} color="#FFF" />
         </TouchableOpacity>
       </View>
