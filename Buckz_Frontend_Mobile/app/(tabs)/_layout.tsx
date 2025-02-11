@@ -68,6 +68,24 @@ export default function TabLayout() {
             tabBarIcon: ({ color }) => <TabBarIcon name="cogs" color={color} />,
           }}
         />
+        <Tabs.Screen
+          name="ptp"
+          options={{
+            title: 'PEER TO PEER',
+            headerShown: true,
+            header: () => <TabHeader title="PEER TO PEER" />,
+            tabBarIcon: ({ color }) => <TabBarIcon name="cogs" color={color} />,
+          }}
+        />
+        <Tabs.Screen
+          name="Settings"
+          options={{
+            title: 'SETTINGS',
+            headerShown: true,
+            header: () => <TabHeader title="SETTINGS" />,
+            tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
+          }}
+        />
       </Tabs>
     </KeyboardAvoidingView>
   );
