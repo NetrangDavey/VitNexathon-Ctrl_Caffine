@@ -51,7 +51,7 @@ export default function TabLayout() {
         tabBarIcon: ({ color }) => <MaterialCommunityIcons name="account-clock" size={28} color={color} style={{ marginBottom: -3 }} />,
           }}
         />
-        <Tabs.Screen
+        {/* <Tabs.Screen
           name="investment"
           options={{
         title: 'INVESTMENT',
@@ -59,7 +59,7 @@ export default function TabLayout() {
         header: () => <TabHeader title="INVESTMENT" />,
         tabBarIcon: ({ color }) => <MaterialCommunityIcons name="chart-line" size={28} color={color} style={{ marginBottom: -3 }} />,
           }}
-        />
+        /> */}
         <Tabs.Screen
           name="AI_Advisor"
           options={{

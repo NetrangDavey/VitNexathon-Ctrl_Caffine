@@ -16,15 +16,15 @@ const { width } = Dimensions.get('window');
 const userData = {
   name: "RAM SWAROOP PATEL SUPERSTAR",
   accountNumber: "**** **** 6065",
-  balance: 9225430.50,
+  balance: 5619225430.50,
   profileImage: "https://example.com/profile.jpg" // Replace with actual image URL
 };
 
 // Sample loans data
 const loansData = [
   { lender: "RPX", amount: 50200, dueDate: "2025-04-15", status: "pending" },
-  { lender: "Chutiya", amount: 3000, dueDate: "2025-04-20", status: "pending" },
-  { lender: "SRMMD", amount: 2000, dueDate: "2025-04-25", status: "overdue" }
+  { lender: "BABU RAO", amount: 3000, dueDate: "2025-04-20", status: "pending" },
+  { lender: "Ambani", amount: 2000, dueDate: "2025-04-25", status: "overdue" }
 ];
 
 // Sample expenditure data for different categories
@@ -43,6 +43,50 @@ const expenditureData = {
   }
 };
 
+// Add after other sample data
+const transactionsData = [
+  {
+    id: '1',
+    type: 'expense',
+    amount: 2500,
+    category: 'Food & Dining',
+    date: '2024-02-11',
+    note: 'Lunch with team'
+  },
+  {
+    id: '2',
+    type: 'received',
+    amount: 15000,
+    personName: 'John Doe',
+    date: '2024-02-10',
+    note: 'Project payment'
+  },
+  {
+    id: '3',
+    type: 'expense',
+    amount: 1200,
+    category: 'Transportation',
+    date: '2024-02-09',
+    note: 'Uber rides'
+  },
+  {
+    id: '4',
+    type: 'received',
+    amount: 5000,
+    personName: 'Sarah Smith',
+    date: '2024-02-08',
+    note: 'Debt repayment'
+  },
+  {
+    id: '5',
+    type: 'expense',
+    amount: 3500,
+    category: 'Shopping',
+    date: '2024-02-07',
+    note: 'New shoes'
+  }
+];
+
 export default function UserTracker() {
   const [activeGraph, setActiveGraph] = useState('monthly');
   const [isSalaryModalVisible, setSalaryModalVisible] = useState(false);
@@ -56,6 +100,7 @@ export default function UserTracker() {
   const [category, setCategory] = useState('');
   const [personName, setPersonName] = useState('');
   const [note, setNote] = useState('');
+  const [transactions, setTransactions] = useState(transactionsData);
 
   const expenseCategories = [
     'Food & Dining',
@@ -95,6 +140,25 @@ export default function UserTracker() {
     }
   };
 
+  const saveTransactions = async (transactions) => {
+    try {
+      await AsyncStorage.setItem('transactions', JSON.stringify(transactions));
+    } catch (error) {
+      console.error('Error saving transactions:', error);
+    }
+  };
+
+  const loadTransactions = async () => {
+    try {
+      const savedTransactions = await AsyncStorage.getItem('transactions');
+      if (savedTransactions) {
+        setTransactions(JSON.parse(savedTransactions));
+      }
+    } catch (error) {
+      console.error('Error loading transactions:', error);
+    }
+  };
+
   const handleTransactionSubmit = async () => {
     try {
       if (!amount || (transactionType === 'expense' && !category) || 
@@ -102,8 +166,9 @@ export default function UserTracker() {
         Alert.alert('Error', 'Please fill all required fields');
         return;
       }
-  
-      const transactionData = {
+
+      const newTransaction = {
+        id: Date.now().toString(), // Generate unique ID
         type: transactionType,
         amount: parseFloat(amount),
         category: transactionType === 'expense' ? category : null,
@@ -111,12 +176,15 @@ export default function UserTracker() {
         note,
         date: moment().format('YYYY-MM-DD')
       };
-  
-      // Here you would typically save to your backend/storage
-      console.log('Transaction saved:', transactionData);
-      Alert.alert('Success', 'Transaction recorded successfully!');
+
+      const newTransactions = [newTransaction, ...transactions];
+      setTransactions(newTransactions);
+      await saveTransactions(newTransactions);
+      
+      // Update the UI
       setTransactionModalVisible(false);
       resetForm();
+      Alert.alert('Success', 'Transaction recorded successfully!');
     } catch (error) {
       Alert.alert('Error', 'Failed to save transaction');
     }
@@ -131,6 +199,7 @@ export default function UserTracker() {
 
   useEffect(() => {
     loadSalarySettings();
+    loadTransactions();
   }, []);
 
   const renderUserHeader = () => (
@@ -385,12 +454,67 @@ export default function UserTracker() {
     </Animatable.View>
   );
 
+  const renderTransactionsList = () => (
+    <Animatable.View animation="fadeInUp" delay={400} style={styles.sectionContainer}>
+      <View style={styles.sectionHeader}>
+        <Text style={styles.sectionTitle}>Recent Transactions</Text>
+        <TouchableOpacity onPress={() => Alert.alert('View All', 'Show all transactions screen')}>
+          <Text style={styles.viewAllButton}>View All</Text>
+        </TouchableOpacity>
+      </View>
+      
+      {transactions.slice(0, 3).map((transaction, index) => (
+        <Animatable.View 
+          key={transaction.id}
+          animation="fadeInRight"
+          delay={index * 100}
+          style={styles.transactionCard}
+        >
+          <View style={styles.transactionLeft}>
+            <View style={[
+              styles.transactionIcon,
+              { backgroundColor: transaction.type === 'expense' ? '#FFE5E5' : '#E3FFE5' }
+            ]}>
+              <MaterialIcons 
+                name={transaction.type === 'expense' ? 'arrow-upward' : 'arrow-downward'} 
+                size={24} 
+                color={transaction.type === 'expense' ? '#FF4444' : '#4CAF50'}
+              />
+            </View>
+            <View style={styles.transactionInfo}>
+              <Text style={styles.transactionTitle}>
+                {transaction.type === 'expense' ? transaction.category : transaction.personName}
+              </Text>
+              <Text style={styles.transactionDate}>
+                {moment(transaction.date).format('MMM DD, YYYY')}
+              </Text>
+            </View>
+          </View>
+          <View style={styles.transactionRight}>
+            <Text style={[
+              styles.transactionAmount,
+              { color: transaction.type === 'expense' ? '#FF4444' : '#4CAF50' }
+            ]}>
+              {transaction.type === 'expense' ? '-' : '+'}₹{transaction.amount}
+            </Text>
+            {transaction.note && (
+              <Text style={styles.transactionNote} numberOfLines={1}>
+                {transaction.note}
+              </Text>
+            )}
+          </View>
+        </Animatable.View>
+      ))}
+    </Animatable.View>
+  );
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
         {renderUserHeader()}
         {renderSalaryInfo()}
         {renderLoansSection()}
+        {renderTransactionsList()}
         {renderExpenditureGraphs()}
       </ScrollView>
       {renderSalaryModal()}
@@ -670,5 +794,65 @@ const styles = StyleSheet.create({
   noteInput: {
     height: 80,
     textAlignVertical: 'top',
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  viewAllButton: {
+    color: '#4C49ED',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  transactionCard: {
+    backgroundColor: '#FFF',
+    padding: 15,
+    borderRadius: 12,
+    marginBottom: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    elevation: 2,
+  },
+  transactionLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  transactionIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  transactionInfo: {
+    flex: 1,
+  },
+  transactionTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#2d3436',
+  },
+  transactionDate: {
+    fontSize: 12,
+    color: '#636e72',
+    marginTop: 4,
+  },
+  transactionRight: {
+    alignItems: 'flex-end',
+  },
+  transactionAmount: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  transactionNote: {
+    fontSize: 12,
+    color: '#636e72',
+    marginTop: 4,
+    maxWidth: 150,
   },
 });
