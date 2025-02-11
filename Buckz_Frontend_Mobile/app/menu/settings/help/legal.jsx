@@ -76,7 +76,7 @@ Welcome to Buckz (the “Platform”), operated by TEAM CTRL CAFFEINE (“we,”
  1.10 DISPUTE RESOLUTION
 
 - Any disputes arising out of or related to these Terms shall be resolved through binding arbitration in accordance with the laws of India.
-- Failing an arbitration agreement, the dispute shall be subject to the exclusive jurisdiction of the courts in [Insert Jurisdiction, e.g., Mumbai, India].
+- Failing an arbitration agreement, the dispute shall be subject to the exclusive jurisdiction of the courts in Chennai, India.
 
  1.11 MODIFICATIONS
 
@@ -337,6 +337,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     elevation: 4,
     borderLeftWidth: 4,
+    backgroundColor: '#fff', // Added white background
   },
   cardContent: {
     flexDirection: 'row',
@@ -359,7 +360,7 @@ const styles = StyleSheet.create({
     fontSize: 18, // Increased from 16
     fontWeight: 'bold',
     marginBottom: 4,
-    color: '#fff', // Added darker color
+    color: '#000', // Added darker color
   },
   preview: {
     fontSize: 14, // Increased from 12
